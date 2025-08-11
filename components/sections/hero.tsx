@@ -63,7 +63,7 @@ export default function Hero() {
   const flipWords = [
     "I'm Muhammad Suhaib",
     "Welcome to my digital world",
-    "I'm a Computer Science Graduate",
+    // "I'm a Computer Science Graduate",
     "I'm a full-stack developer",
     "Co-Founder of SAOTS",
     "AI/ML & Cybersecurity Enthusiast",
