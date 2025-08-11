@@ -255,6 +255,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       type: 'success',
       message: '🎉 Thank you! Your message has been sent successfully. I\'ll get back to you within 24 hours at the email address you provided.'
     })
+    console.log('Form submitted successfully:', formData)
 
     // Reset form
     setFormData({
