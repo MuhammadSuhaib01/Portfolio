@@ -418,7 +418,7 @@ function ProjectCard({ project, isMobile }: { project: any, isMobile: boolean })
               project.status === 'Active' ? 'border-green-500/50 text-green-400' :
               project.status === 'Final Year Project' ? 'border-blue-500/50 text-blue-400' :
               project.status === 'Internship Project' ? 'border-yellow-500/50 text-yellow-400' :
-              'border-gray-600 text-gray-400'
+              'bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs font-semibold'
             }`}
           >
             {project.status}
