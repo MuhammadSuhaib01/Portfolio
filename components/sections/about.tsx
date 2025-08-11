@@ -47,7 +47,7 @@ export default function About() {
     {
       icon: GraduationCap,
       title: 'Education',
-      description: 'Final year BSc in Computer Science with focus on AI and software engineering',
+      description: 'BSc in Computer Science with focus on AI/ML and software engineering',
       color: 'text-blue-400'
     },
     {

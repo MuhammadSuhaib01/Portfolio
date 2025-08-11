@@ -27,21 +27,7 @@ export default function Footer() {
               <p className="text-gray-300">
                 Let's build something amazing together. 🚀
               </p>
-              {/* <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105"
-                >
-                  Send Message
-                </Button>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="border-purple-500 text-purple-400 hover:bg-purple-500 hover:text-white px-8 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105"
-                >
-                  See My Resume
-                </Button>
-              </div> */}
+            
             </div>
           </ScrollTriggeredAnimation>
 
