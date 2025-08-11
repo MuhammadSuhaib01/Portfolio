@@ -327,14 +327,14 @@ Reply to: ${formData.email}
     {
       icon: Phone,
       title: 'Phone',
-      value: '+92 XXX XXXXXXX',
-      href: 'tel:+92XXXXXXXXX',
+      value: '+60 17-893 4957',
+      href: 'tel:+60178934957',
       description: 'Available for urgent consultations'
     },
     {
       icon: MapPin,
       title: 'Location',
-      value: 'Pakistan',
+      value: 'Malaysia',
       href: '#',
       description: 'Available for remote work globally'
     },
@@ -351,13 +351,13 @@ Reply to: ${formData.email}
     {
       icon: Github,
       name: 'GitHub',
-      href: '#',
+      href: 'https://github.com/MuhammadSuhaib01',
       color: 'hover:text-gray-400'
     },
     {
       icon: Linkedin,
       name: 'LinkedIn',
-      href: '#',
+      href: 'www.linkedin.com/in/muhammadsuhaib01',
       color: 'hover:text-blue-400'
     },
     {
