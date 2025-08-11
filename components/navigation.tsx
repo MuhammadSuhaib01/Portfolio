@@ -154,14 +154,14 @@ export default function Navigation() {
                 {item.name}
               </motion.a>
             ))}
-            <Button
+            {/* <Button
               variant="ghost"
               size="icon"
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
               className="text-white/80 hover:text-white"
             >
               {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-            </Button>
+            </Button> */}
           </div>
 
           {/* Mobile Menu Button */}
