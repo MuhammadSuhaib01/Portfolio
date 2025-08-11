@@ -60,6 +60,7 @@
     "react": "^19.1.1",
     "react-day-picker": "9.8.0",
     "react-dom": "^19.1.1",
+    "react-fast-marquee": "^1.6.5",
     "react-hook-form": "^7.54.1",
     "react-native": "latest",
     "react-resizable-panels": "^2.1.7",
