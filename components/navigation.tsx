@@ -262,7 +262,7 @@ export default function Navigation() {
               </nav>
 
               {/* Theme Toggle */}
-              <motion.div
+              {/* <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={isMobileMenuOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                 transition={{ duration: 0.5, delay: 0.7 }}
@@ -286,7 +286,7 @@ export default function Navigation() {
                     </>
                   )}
                 </Button>
-              </motion.div>
+              </motion.div> */}
 
               {/* Social Links */}
               <motion.div
@@ -314,14 +314,14 @@ export default function Navigation() {
               </motion.div>
 
               {/* Close hint */}
-              <motion.p
+              {/* <motion.p
                 initial={{ opacity: 0 }}
                 animate={isMobileMenuOpen ? { opacity: 1 } : { opacity: 0 }}
                 transition={{ duration: 0.5, delay: 1 }}
                 className="absolute bottom-8 text-gray-500 text-sm"
               >
                 Tap outside to close
-              </motion.p>
+              </motion.p> */}
             </div>
           </div>
         </motion.div>
