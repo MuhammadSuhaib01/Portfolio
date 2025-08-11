@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/tooltip'
 import { Mail, Phone, MapPin, Send, Calendar, Github, Linkedin, User, AtSign, MessageSquare, FileText, CheckCircle, AlertCircle, Loader2, Info } from 'lucide-react'
 import { ScrollTriggeredAnimation, StaggeredAnimation } from '@/components/ui/scroll-triggered-animation'
+import emailjs from "emailjs-com";
 
 // Comprehensive regex patterns for validation
 const VALIDATION_PATTERNS = {
@@ -197,124 +198,201 @@ export default function Contact() {
   }
 
   // Handle form submission
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
-    if (!validateForm()) {
-      setStatus({
-        type: 'error',
-        message: 'Please fix the validation errors above before submitting.'
-      })
-      return
-    }
-
-    setStatus({ type: 'loading' })
-
-    try {
-      // Email data for msuhaibkl@gmail.com
-      const emailData = {
-        to: 'msuhaibkl@gmail.com',
-        from: formData.email,
-        replyTo: formData.email,
-        subject: `Portfolio Contact: ${formData.subject}`,
-        html: `
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <meta charset="utf-8">
-            <title>New Contact Form Submission</title>
-            <style>
-              body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
-              .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-              .header { background: linear-gradient(135deg, #8b5cf6, #ec4899); color: white; padding: 20px; border-radius: 8px 8px 0 0; }
-              .content { background: #f8fafc; padding: 20px; border: 1px solid #e2e8f0; }
-              .section { background: white; padding: 15px; margin: 10px 0; border-radius: 6px; border-left: 4px solid #8b5cf6; }
-              .footer { background: #1e293b; color: #94a3b8; padding: 15px; text-align: center; border-radius: 0 0 8px 8px; font-size: 14px; }
-              .highlight { color: #8b5cf6; font-weight: 600; }
-              .message-content { background: #f1f5f9; padding: 15px; border-radius: 6px; white-space: pre-wrap; }
-            </style>
-          </head>
-          <body>
-            <div class="container">
-              <div class="header">
-                <h1 style="margin: 0; font-size: 24px;">🚀 New Contact Form Submission</h1>
-                <p style="margin: 5px 0 0 0; opacity: 0.9;">From your portfolio website</p>
-              </div>
-              
-              <div class="content">
-                <div class="section">
-                  <h3 style="margin-top: 0; color: #1e293b;">👤 Contact Information</h3>
-                  <p><strong>Name:</strong> <span class="highlight">${formData.name}</span></p>
-                  <p><strong>Email:</strong> <span class="highlight">${formData.email}</span></p>
-                  <p><strong>Subject:</strong> <span class="highlight">${formData.subject}</span></p>
-                </div>
-                
-                <div class="section">
-                  <h3 style="margin-top: 0; color: #1e293b;">💼 Project Details</h3>
-                  <div class="message-content">${formData.message}</div>
-                </div>
-                
-                <div class="section">
-                  <h3 style="margin-top: 0; color: #1e293b;">📊 Submission Details</h3>
-                  <p><strong>Submitted:</strong> ${new Date().toLocaleString()}</p>
-                  <p><strong>Source:</strong> Portfolio Contact Form</p>
-                  <p><strong>Reply To:</strong> <a href="mailto:${formData.email}" style="color: #8b5cf6;">${formData.email}</a></p>
-                </div>
-              </div>
-              
-              <div class="footer">
-                <p style="margin: 0;">This message was sent from your portfolio contact form.</p>
-                <p style="margin: 5px 0 0 0;">Muhammad Suhaib - Full-Stack Developer</p>
-              </div>
-            </div>
-          </body>
-          </html>
-        `,
-        text: `
-New Contact Form Submission
-
-Contact Information:
-Name: ${formData.name}
-Email: ${formData.email}
-Subject: ${formData.subject}
-
-Project Details:
-${formData.message}
-
-Submitted: ${new Date().toLocaleString()}
-Reply to: ${formData.email}
-        `
-      }
-
-      // Here you would integrate with your email service (EmailJS, Resend, etc.)
-      console.log('Email data prepared for msuhaibkl@gmail.com:', emailData)
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      
-      setStatus({
-        type: 'success',
-        message: '🎉 Thank you! Your message has been sent successfully. I\'ll get back to you within 24 hours at the email address you provided.'
-      })
-      
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: ''
-      })
-      setErrors({})
-      setTouched({})
-
-    } catch (error) {
-      console.error('Form submission error:', error)
-      setStatus({
-        type: 'error',
-        message: '❌ Sorry, there was an error sending your message. Please try again or contact me directly at msuhaibkl@gmail.com'
-      })
-    }
+  // Handle form submission
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault()
+  
+  if (!validateForm()) {
+    setStatus({
+      type: 'error',
+      message: 'Please fix the validation errors above before submitting.'
+    })
+    return
   }
+
+  setStatus({ type: 'loading' })
+
+  try {
+    // ✅ Use EmailJS instead of the manual HTML emailData
+    // Use environment variables directly and check for their existence
+    const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID
+    const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID
+    const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+
+    if (!serviceId || !templateId || !publicKey) {
+      throw new Error('EmailJS environment variables are not set.')
+    }
+
+    await emailjs.send(
+      serviceId,     // Your EmailJS service ID
+      templateId,    // Your EmailJS template ID
+      {
+        name: formData.name,
+        email: formData.email,
+        subject: formData.subject,
+        message: formData.message
+      },
+      publicKey      // Your EmailJS public key (from account settings)
+    )
+
+    // ❌ Old manual email object — not needed with EmailJS
+    /*
+    const emailData = {
+      to: 'msuhaibkl@gmail.com',
+      from: formData.email,
+      replyTo: formData.email,
+      subject: `Portfolio Contact: ${formData.subject}`,
+      html: `<html> ... </html>`, // Big HTML template
+      text: `...` // Plain text fallback
+    }
+    console.log('Email data prepared:', emailData)
+    */
+
+    // Simulated API delay (optional, can be removed)
+    // await new Promise(resolve => setTimeout(resolve, 2000))
+
+    setStatus({
+      type: 'success',
+      message: '🎉 Thank you! Your message has been sent successfully. I\'ll get back to you within 24 hours at the email address you provided.'
+    })
+
+    // Reset form
+    setFormData({
+      name: '',
+      email: '',
+      subject: '',
+      message: ''
+    })
+    setErrors({})
+    setTouched({})
+
+  } catch (error) {
+    console.error('Form submission error:', error)
+    setStatus({
+      type: 'error',
+      message: '❌ Sorry, there was an error sending your message. Please try again or contact me directly at msuhaibkl@gmail.com'
+    })
+  }
+}
+
+//   const handleSubmit = async (e: React.FormEvent) => {
+//     e.preventDefault()
+    
+//     if (!validateForm()) {
+//       setStatus({
+//         type: 'error',
+//         message: 'Please fix the validation errors above before submitting.'
+//       })
+//       return
+//     }
+
+//     setStatus({ type: 'loading' })
+
+//     try {
+//       // Email data for msuhaibkl@gmail.com
+//       const emailData = {
+//         to: 'msuhaibkl@gmail.com',
+//         from: formData.email,
+//         replyTo: formData.email,
+//         subject: `Portfolio Contact: ${formData.subject}`,
+//         html: `
+//           <!DOCTYPE html>
+//           <html>
+//           <head>
+//             <meta charset="utf-8">
+//             <title>New Contact Form Submission</title>
+//             <style>
+//               body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
+//               .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+//               .header { background: linear-gradient(135deg, #8b5cf6, #ec4899); color: white; padding: 20px; border-radius: 8px 8px 0 0; }
+//               .content { background: #f8fafc; padding: 20px; border: 1px solid #e2e8f0; }
+//               .section { background: white; padding: 15px; margin: 10px 0; border-radius: 6px; border-left: 4px solid #8b5cf6; }
+//               .footer { background: #1e293b; color: #94a3b8; padding: 15px; text-align: center; border-radius: 0 0 8px 8px; font-size: 14px; }
+//               .highlight { color: #8b5cf6; font-weight: 600; }
+//               .message-content { background: #f1f5f9; padding: 15px; border-radius: 6px; white-space: pre-wrap; }
+//             </style>
+//           </head>
+//           <body>
+//             <div class="container">
+//               <div class="header">
+//                 <h1 style="margin: 0; font-size: 24px;">🚀 New Contact Form Submission</h1>
+//                 <p style="margin: 5px 0 0 0; opacity: 0.9;">From your portfolio website</p>
+//               </div>
+              
+//               <div class="content">
+//                 <div class="section">
+//                   <h3 style="margin-top: 0; color: #1e293b;">👤 Contact Information</h3>
+//                   <p><strong>Name:</strong> <span class="highlight">${formData.name}</span></p>
+//                   <p><strong>Email:</strong> <span class="highlight">${formData.email}</span></p>
+//                   <p><strong>Subject:</strong> <span class="highlight">${formData.subject}</span></p>
+//                 </div>
+                
+//                 <div class="section">
+//                   <h3 style="margin-top: 0; color: #1e293b;">💼 Project Details</h3>
+//                   <div class="message-content">${formData.message}</div>
+//                 </div>
+                
+//                 <div class="section">
+//                   <h3 style="margin-top: 0; color: #1e293b;">📊 Submission Details</h3>
+//                   <p><strong>Submitted:</strong> ${new Date().toLocaleString()}</p>
+//                   <p><strong>Source:</strong> Portfolio Contact Form</p>
+//                   <p><strong>Reply To:</strong> <a href="mailto:${formData.email}" style="color: #8b5cf6;">${formData.email}</a></p>
+//                 </div>
+//               </div>
+              
+//               <div class="footer">
+//                 <p style="margin: 0;">This message was sent from your portfolio contact form.</p>
+//                 <p style="margin: 5px 0 0 0;">Muhammad Suhaib - Full-Stack Developer</p>
+//               </div>
+//             </div>
+//           </body>
+//           </html>
+//         `,
+//         text: `
+// New Contact Form Submission
+
+// Contact Information:
+// Name: ${formData.name}
+// Email: ${formData.email}
+// Subject: ${formData.subject}
+
+// Project Details:
+// ${formData.message}
+
+// Submitted: ${new Date().toLocaleString()}
+// Reply to: ${formData.email}
+//         `
+//       }
+
+//       // Here you would integrate with your email service (EmailJS, Resend, etc.)
+//       console.log('Email data prepared for msuhaibkl@gmail.com:', emailData)
+      
+//       // Simulate API call
+//       await new Promise(resolve => setTimeout(resolve, 2000))
+      
+//       setStatus({
+//         type: 'success',
+//         message: '🎉 Thank you! Your message has been sent successfully. I\'ll get back to you within 24 hours at the email address you provided.'
+//       })
+      
+//       // Reset form
+//       setFormData({
+//         name: '',
+//         email: '',
+//         subject: '',
+//         message: ''
+//       })
+//       setErrors({})
+//       setTouched({})
+
+//     } catch (error) {
+//       console.error('Form submission error:', error)
+//       setStatus({
+//         type: 'error',
+//         message: '❌ Sorry, there was an error sending your message. Please try again or contact me directly at msuhaibkl@gmail.com'
+//       })
+//     }
+//   }
 
   const contactInfo = [
     {
