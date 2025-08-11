@@ -8,6 +8,7 @@ import { FlipWords, GradientFlipWords, TypewriterEffect } from '@/components/ui/
 import { AnimatedGradientText } from '@/components/ui/animated-gradient-text'
 import { ChevronDown, Github, Linkedin, Mail, ArrowDown } from 'lucide-react'
 import { Suspense, useState, useEffect, useRef } from 'react'
+import { socialLinks } from '../constants/config'
 
 // Optimized 3D Sphere with error handling
 function AnimatedSphere() {
@@ -308,23 +309,23 @@ export default function Hero() {
           variants={itemVariants}
           className="flex justify-center space-x-6 mb-16"
         >
-          {[
-            { icon: Github, href: '#', label: 'GitHub', color: 'hover:bg-gray-600/30' },
-            { icon: Linkedin, href: '#', label: 'LinkedIn', color: 'hover:bg-blue-600/30' },
-            { icon: Mail, href: '#contact', label: 'Email', color: 'hover:bg-red-600/30' }
-          ].map(({ icon: Icon, href, label, color }) => (
+          {socialLinks.map(({ icon: Icon, href, name, color }) => (
             <motion.a
-              key={label}
+              key={name}
               href={href}
+              target="_blank"
+              rel="noopener noreferrer"
               whileHover={{ scale: 1.2, y: -2 }}
               whileTap={{ scale: 0.9 }}
               transition={{ duration: 0.3 }}
-              className={`p-3 bg-white/10 backdrop-blur-sm rounded-full text-white transition-all duration-400 ${color}`}
+              color=''
+              className='p-3 bg-white/10 backdrop-blur-sm rounded-full text-white transition-all duration-400 hover:bg-gray-600/30'
             >
-              <Icon className="w-6 h-6" />
+              <Icon className={`w-6 h-6 ${color}`} />
             </motion.a>
           ))}
         </motion.div>
+        
 
         <motion.div
           variants={itemVariants}
